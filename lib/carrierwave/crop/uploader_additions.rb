@@ -33,16 +33,22 @@ module CarrierWave
               sizes = proc.call(img['width'], img['height'])
               h = sizes[:height]
               w = sizes[:width]
+              ratio_width = img['width'].to_f / w.to_f
+              ratio_height = img['height'].to_f / h.to_f
 
-              if crop_x.blank? && crop_y.blank?
-                img.combine_options do |op|
-                  op.crop "#{w.to_i}x#{h.to_i}+0+0"
-                  op.gravity 'Center'
-                end
-              else
-                img.crop("#{w.to_i}x#{h.to_i}+#{crop_x.to_i}+#{crop_y.to_i}")
-              end
-              img.resize("#{width}x#{height}")
+              img.crop("#{w.to_i * ratio_width}x#{h.to_i * ratio_height}+#{crop_x.to_i * ratio_width}+#{crop_y.to_i * ratio_height}")
+
+              # if crop_x.blank? && crop_y.blank?
+              #   img.combine_options do |op|
+              #     op.crop "#{w.to_i}x#{h.to_i}+0+0"
+              #     op.gravity 'Center'
+              #   end
+              # else
+              #   img.crop("#{w.to_i}x#{h.to_i}+#{crop_x.to_i}+#{crop_y.to_i}")
+              # end
+              
+              #img.resize("#{width}x#{height}")
+
               img
             end
 
