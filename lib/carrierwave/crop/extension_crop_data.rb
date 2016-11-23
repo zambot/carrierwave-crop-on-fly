@@ -5,7 +5,7 @@ if defined? CarrierWave::Uploader::Base
 
     alias_method :old_cache!, :cache!
 
-    def cache!(file)
+    def cache!(file = sanitized_file)
       if file.is_a?(ActionDispatch::Http::UploadedFile)
         self.crop_x = file.crop_x
         self.crop_y = file.crop_y
